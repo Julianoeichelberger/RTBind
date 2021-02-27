@@ -2,3 +2,8 @@
 
 It's a simple lib to use livebindings in runtime
 
+Example:
+
+TObjectDTO = class
+
+end;
