@@ -24,7 +24,7 @@ type
     procedure Link(ASource: TObject; const ASourcePropName: string; const ALinkTo: TObject; const ALinkToProp: string;
       const ACreateOptions: TBindings.TCreateOptions = [coNotifyOutput, coEvaluate]); overload;
 
-    procedure Link(ASource: TObject; ALinkTo: TComponent; APropName: string = 'Text'); overload;
+    procedure Link(ASource: TObject; ASourcePropName: string; ALinkTo: TComponent); overload;
   end;
 
 implementation
@@ -89,10 +89,9 @@ begin
     Expression(ASource, 'lnk')], 'lnk.' + ASourcePropName, nil, nil, ACreateOptions));
 end;
 
-procedure TRTBindManager.Link(ASource: TObject; ALinkTo: TComponent; APropName: string);
+procedure TRTBindManager.Link(ASource: TObject; ASourcePropName: string; ALinkTo: TComponent);
 begin
-  Link(ASource, APropName, ALinkTo, TRTBindMapping.Prop(ALinkTo));
-
+  Link(ASource, ASourcePropName, ALinkTo, TRTBindMapping.Prop(ALinkTo));
 end;
 
 end.
