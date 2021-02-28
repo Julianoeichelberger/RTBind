@@ -28,7 +28,7 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);   
 begin   
-  TRTBindMapping.Register<IRTBindMappingDelphi>;    
+  TRTBindMapping.Register<IRTBindMappingDelphi>;        
     
   FObject := TObjectDTO.Create;         
   FObject.name := 'Name';   
