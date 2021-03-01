@@ -71,14 +71,13 @@ begin
     FControlsBindings.Items[I].EvaluateOutputs;
 end;
 
+function Expression(Obj: TObject; const StrID: string): IScope;
+begin
+  Result := TBindings.CreateAssociationScope([Associate(Obj, StrID)]);
+end;
+
 procedure TRTBindManager.Link(ASource: TObject; const ASourcePropName: string; const ALinkTo: TObject;
   const ALinkToProp: string; const ACreateOptions: TBindings.TCreateOptions);
-
-  function Expression(Obj: TObject; const StrID: string): IScope;
-  begin
-    Result := TBindings.CreateAssociationScope([Associate(Obj, StrID)]);
-  end;
-
 begin
   FSourceBindings.Add(TBindings.CreateManagedBinding([
     Expression(ASource, 'src')], 'src.' + ASourcePropName, [

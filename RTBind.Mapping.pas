@@ -3,7 +3,7 @@ unit RTBind.Mapping;
 interface
 
 Uses
-  System.Classes, System.Generics.Collections, RTBind.Mapping.Custom;
+  System.Classes, System.Generics.Collections, Controls, RTBind.Mapping.Custom;
 
 type
   TRTBindMapping = class
@@ -20,13 +20,13 @@ type
 
     class procedure UnRegisterAll;
 
-    class function Prop(const Sender: TObject): string;
+    class function Prop(const Sender: TCustomControl): string;
   end;
 
 implementation
 
 Uses
-  System.TypInfo, System.Rtti;
+  System.TypInfo, System.Rtti, System.SysUtils;
 
 { TRTBindMapping }
 
@@ -40,9 +40,15 @@ begin
   FList.Free;
 end;
 
-class function TRTBindMapping.Prop(const Sender: TObject): string;
+class function TRTBindMapping.Prop(const Sender: TCustomControl): string;
 begin
-  Result := FList.Items[Sender.ClassName];
+  if FList.ContainsKey(Sender.ClassName) then
+    Exit(FList.Items[Sender.ClassName]);
+
+  if FList.ContainsKey(Sender.Parent.ClassName) then
+    Exit(FList.Items[Sender.Parent.ClassName]);
+
+  raise Exception.Create('Control class not found! Verify your Mappings...');
 end;
 
 class procedure TRTBindMapping.Register(const AControlClass, APropName: string);
