@@ -4,7 +4,7 @@ interface
 
 uses
   System.Generics.Collections, System.Bindings.Expression, System.Bindings.EvalProtocol, System.Bindings.Helper,
-  Data.Bind.Components, System.Classes;
+  Data.Bind.Components, System.Classes, Controls;
 
 type
   TRTBindEmpressionList = TObjectList<TBindingExpression>;
@@ -21,10 +21,11 @@ type
     procedure Notify(ASource: TObject; const APropName: string = '');
     procedure NotifyControls;
 
-    procedure Link(ASource: TObject; const ASourcePropName: string; const ALinkTo: TObject; const ALinkToProp: string;
+    procedure Link(ASource: TObject; const ASourcePropName: string;
+      const ALinkTo: TObject; const ALinkToProp: string;
       const ACreateOptions: TBindings.TCreateOptions = [coNotifyOutput, coEvaluate]); overload;
 
-    procedure Link(ASource: TObject; ASourcePropName: string; ALinkTo: TComponent); overload;
+    procedure Link(ASource: TObject; ASourcePropName: string; ALinkTo: TControl); overload;
   end;
 
 implementation
@@ -88,7 +89,7 @@ begin
     Expression(ASource, 'lnk')], 'lnk.' + ASourcePropName, nil, nil, ACreateOptions));
 end;
 
-procedure TRTBindManager.Link(ASource: TObject; ASourcePropName: string; ALinkTo: TComponent);
+procedure TRTBindManager.Link(ASource: TObject; ASourcePropName: string; ALinkTo: TControl);
 begin
   Link(ASource, ASourcePropName, ALinkTo, TRTBindMapping.Prop(ALinkTo));
 end;

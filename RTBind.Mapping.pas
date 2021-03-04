@@ -8,7 +8,7 @@ Uses
 type
   TRTBindMapping = class
   strict private
-    class var FList: TDictionary<TClassName, TPropertyName>;
+    class var FClassList: TDictionary<TClassName, TPropertyName>;
   private
     class procedure Initialize;
     class procedure ReleaseInstances;
@@ -20,7 +20,7 @@ type
 
     class procedure UnRegisterAll;
 
-    class function Prop(const Sender: TCustomControl): string;
+    class function Prop(const Sender: TControl): string;
   end;
 
 implementation
@@ -32,28 +32,28 @@ Uses
 
 class procedure TRTBindMapping.Initialize;
 begin
-  FList := TDictionary<TClassName, TPropertyName>.Create;
+  FClassList := TDictionary<TClassName, TPropertyName>.Create;
 end;
 
 class procedure TRTBindMapping.ReleaseInstances;
 begin
-  FList.Free;
+  FClassList.Free;
 end;
 
-class function TRTBindMapping.Prop(const Sender: TCustomControl): string;
+class function TRTBindMapping.Prop(const Sender: TControl): string;
 begin
-  if FList.ContainsKey(Sender.ClassName) then
-    Exit(FList.Items[Sender.ClassName]);
+  if FClassList.ContainsKey(Sender.ClassName) then
+    Exit(FClassList.Items[Sender.ClassName]);
 
-  if FList.ContainsKey(Sender.Parent.ClassName) then
-    Exit(FList.Items[Sender.Parent.ClassName]);
+  if FClassList.ContainsKey(Sender.Parent.ClassName) then
+    Exit(FClassList.Items[Sender.Parent.ClassName]);
 
   raise Exception.Create('Control class not found! Verify your Mappings...');
 end;
 
 class procedure TRTBindMapping.Register(const AControlClass, APropName: string);
 begin
-  FList.Add(AControlClass, APropName);
+  FClassList.Add(AControlClass, APropName);
 end;
 
 class procedure TRTBindMapping.Register<I>;
@@ -64,12 +64,12 @@ var
 begin
   AttrList := Context.GetType(TypeInfo(I)).GetAttributes;
   for Attr in AttrList do
-    FList.Add(Control(Attr).ControlClass, Control(Attr).PropName)
+    FClassList.Add(Control(Attr).ControlClass, Control(Attr).PropName)
 end;
 
 class procedure TRTBindMapping.UnRegister(const AControlClass: string);
 begin
-  FList.Remove(AControlClass);
+  FClassList.Remove(AControlClass);
 end;
 
 class procedure TRTBindMapping.UnRegister<I>;
@@ -80,12 +80,12 @@ var
 begin
   AttrList := Context.GetType(TypeInfo(I)).GetAttributes;
   for Attr in AttrList do
-    FList.Remove(Control(Attr).ControlClass)
+    FClassList.Remove(Control(Attr).ControlClass)
 end;
 
 class procedure TRTBindMapping.UnRegisterAll;
 begin
-  FList.Clear;
+  FClassList.Clear;
 end;
 
 initialization
