@@ -9,7 +9,20 @@ uses
 type
   TRTBindEmpressionList = TObjectList<TBindingExpression>;
 
-  TRTBindManager = class
+  IRTBindManager = Interface
+    ['{6DEE20D5-DFA6-4DDB-955B-EEA81A20A735}']
+    procedure Clear;
+    procedure Notify(ASource: TObject; const APropName: string = '');
+    procedure NotifyControls;
+
+    procedure Link(ASource: TObject; const ASourcePropName: string;
+      const ALinkTo: TObject; const ALinkToProp: string;
+      const ACreateOptions: TBindings.TCreateOptions = [coNotifyOutput, coEvaluate]); overload;
+
+    procedure Link(ASource: TObject; ASourcePropName: string; ALinkTo: TControl); overload;
+  End;
+
+  TRTBindManager = class(TInterfacedObject, IRTBindManager)
   private
     FSourceBindings: TRTBindEmpressionList;
     FControlsBindings: TRTBindEmpressionList;
